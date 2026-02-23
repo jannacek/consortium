@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Artistic Research in Transdisciplinary Consortia</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0e0d0b;
+    --surface: #161410;
+    --gold: #c9a96e;
+    --gold-light: #e8cfa0;
+    --cream: #f0ead8;
+    --muted: #6b6456;
+    --accent: #7a9e8e;
+    --text: #ddd5c4;
+    --slide-w: 900px;
+    --slide-h: 560px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    padding: 40px 20px;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: 
+      radial-gradient(ellipse 80% 60% at 20% 10%, rgba(201,169,110,0.04) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 80% at 80% 90%, rgba(122,158,142,0.04) 0%, transparent 60%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .deck-header {
+    text-align: center;
+    margin-bottom: 48px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .deck-header .eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--gold);
+    opacity: 0.7;
+    margin-bottom: 10px;
+  }
+
+  .deck-header h1 {
+    font-size: 13px;
+    font-family: 'DM Mono', monospace;
+    font-weight: 300;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+  }
+
+  /* Slide container */
+  .slides-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    width: 100%;
+    max-width: var(--slide-w);
+    position: relative;
+    z-index: 1;
+  }
+
+  .slide {
+    width: 100%;
+    min-height: var(--slide-h);
+    background: var(--surface);
+    border: 1px solid rgba(201,169,110,0.12);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 60px 70px;
+    cursor: default;
+    transition: border-color 0.4s ease;
+  }
+
+  .slide:hover {
+    border-color: rgba(201,169,110,0.22);
+  }
+
+  /* Slide number */
+  .slide-num {
+    position: absolute;
+    top: 28px;
+    right: 34px;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 0.15em;
+    opacity: 0.5;
+  }
+
+  /* Corner decoration */
+  .slide::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 120px; height: 120px;
+    background: radial-gradient(ellipse at top left, rgba(201,169,110,0.06) 0%, transparent 70%);
+  }
+
+  /* Gold line accent */
+  .slide-line {
+    width: 32px;
+    height: 1px;
+    background: var(--gold);
+    margin-bottom: 24px;
+    opacity: 0.6;
+  }
+
+  /* Eyebrow label */
+  .slide-eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--gold);
+    opacity: 0.65;
+    margin-bottom: 14px;
+  }
+
+  /* Slide title */
+  .slide h2 {
+    font-size: 38px;
+    font-weight: 300;
+    line-height: 1.15;
+    color: var(--cream);
+    letter-spacing: -0.01em;
+    margin-bottom: 32px;
+    max-width: 580px;
+  }
+
+  .slide h2 em {
+    font-style: italic;
+    color: var(--gold-light);
+  }
+
+  /* Body text */
+  .slide-body {
+    font-size: 19px;
+    font-weight: 300;
+    line-height: 1.75;
+    color: var(--text);
+    max-width: 620px;
+    opacity: 0.85;
+  }
+
+  .slide-body p + p {
+    margin-top: 14px;
+  }
+
+  .slide-body strong {
+    font-weight: 600;
+    color: var(--cream);
+  }
+
+  /* List items */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px 40px;
+    margin-top: 8px;
+  }
+
+  .list-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .list-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 14px;
+    opacity: 0.8;
+  }
+
+  .list-item {
+    font-size: 17.5px;
+    font-weight: 300;
+    line-height: 1.6;
+    color: var(--text);
+    padding: 7px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    opacity: 0.85;
+  }
+
+  .list-item::before {
+    content: '—';
+    color: var(--gold);
+    opacity: 0.5;
+    font-size: 12px;
+    flex-shrink: 0;
+  }
+
+  .list-item.missing::before {
+    color: var(--accent);
+  }
+
+  /* EMI grid */
+  .emi-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 14px;
+    margin-top: 10px;
+  }
+
+  .emi-card {
+    background: rgba(201,169,110,0.04);
+    border: 1px solid rgba(201,169,110,0.1);
+    padding: 20px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    transition: background 0.3s ease, border-color 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .emi-card:hover {
+    background: rgba(201,169,110,0.08);
+    border-color: rgba(201,169,110,0.22);
+  }
+
+  .emi-card::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .emi-card:hover::after { opacity: 0.4; }
+
+  .emi-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    color: var(--gold);
+    opacity: 0.5;
+    letter-spacing: 0.1em;
+  }
+
+  .emi-label {
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 1.35;
+    color: var(--cream);
+    letter-spacing: 0.01em;
+  }
+
+  /* Questions slide */
+  .questions-list {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-top: 4px;
+  }
+
+  .q-item {
+    padding: 18px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    font-size: 19px;
+    font-style: italic;
+    font-weight: 300;
+    color: var(--text);
+    line-height: 1.5;
+    opacity: 0.85;
+    display: flex;
+    gap: 16px;
+    align-items: baseline;
+    transition: opacity 0.2s ease, color 0.2s ease;
+  }
+
+  .q-item:hover { opacity: 1; color: var(--cream); }
+
+  .q-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    color: var(--gold);
+    letter-spacing: 0.1em;
+    opacity: 0.6;
+    flex-shrink: 0;
+    margin-top: 4px;
+  }
+
+  /* Slide 1 special layout */
+  .s1-quote {
+    font-size: 20px;
+    font-style: italic;
+    font-weight: 300;
+    line-height: 1.65;
+    color: var(--cream);
+    border-left: 1px solid var(--gold);
+    padding-left: 24px;
+    margin-top: 28px;
+    max-width: 560px;
+    opacity: 0.9;
+  }
+
+  /* Claim slide big text */
+  .claim-text {
+    font-size: 22px;
+    font-style: italic;
+    font-weight: 300;
+    line-height: 1.65;
+    color: var(--cream);
+    max-width: 600px;
+    padding: 28px 0 0 0;
+    border-top: 1px solid rgba(201,169,110,0.2);
+    margin-top: 8px;
+  }
+
+  .sub-note {
+    margin-top: 24px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+    opacity: 0.7;
+  }
+
+  /* Slide 6 strategic */
+  .strategic-body {
+    font-size: 19.5px;
+    font-weight: 300;
+    line-height: 1.8;
+    color: var(--text);
+    max-width: 590px;
+    opacity: 0.85;
+  }
+
+  .strategic-body p + p { margin-top: 16px; }
+
+  .stop-note {
+    margin-top: 28px;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--accent);
+    letter-spacing: 0.12em;
+    opacity: 0.6;
+  }
+
+  /* BIG background text */
+  .bg-text {
+    position: absolute;
+    right: -20px;
+    bottom: -30px;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 180px;
+    font-weight: 300;
+    font-style: italic;
+    color: rgba(201,169,110,0.025);
+    line-height: 1;
+    user-select: none;
+    pointer-events: none;
+    white-space: nowrap;
+  }
+
+  /* Nav controls */
+  .nav-bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 28px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .nav-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--muted);
+    opacity: 0.3;
+    cursor: pointer;
+    transition: opacity 0.2s ease, background 0.2s ease;
+  }
+
+  .nav-dot.active { opacity: 1; background: var(--gold); }
+
+  /* Presentation mode */
+  .present-btn {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 100;
+    background: var(--surface);
+    border: 1px solid rgba(201,169,110,0.3);
+    color: var(--gold);
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    padding: 10px 16px;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: background 0.2s, border-color 0.2s;
+  }
+
+  .present-btn:hover {
+    background: rgba(201,169,110,0.08);
+    border-color: rgba(201,169,110,0.5);
+  }
+
+  /* Fullscreen presentation mode */
+  body.presenting {
+    padding: 0;
+    gap: 0;
+    background: var(--bg);
+    justify-content: flex-start;
+  }
+
+  body.presenting .deck-header,
+  body.presenting .nav-bar { display: none; }
+
+  body.presenting .slides-wrapper {
+    max-width: 100%;
+    gap: 0;
+  }
+
+  body.presenting .slide {
+    display: none;
+    min-height: 100vh;
+    border: none;
+    padding: 80px 120px;
+  }
+
+  body.presenting .slide.active-slide { display: flex; }
+
+  .slide-counter {
+    display: none;
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 0.15em;
+    opacity: 0.5;
+    z-index: 10;
+  }
+
+  body.presenting .slide-counter { display: block; }
+  body.presenting .present-btn { display: none; }
+
+  .exit-btn {
+    display: none;
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 100;
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.1);
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    padding: 10px 16px;
+    cursor: pointer;
+    text-transform: uppercase;
+  }
+
+  body.presenting .exit-btn { display: block; }
+</style>
+</head>
+<body>
+
+<div class="deck-header">
+  <div class="eyebrow">Meeting with Anke · February 2026</div>
+  <h1>Artistic Research in Transdisciplinary Consortia — FORUM+ Article in Development</h1>
+</div>
+
+<div class="slides-wrapper">
+
+  <!-- Slide 1 -->
+  <div class="slide" id="s1">
+    <span class="slide-num">01 / 07</span>
+    <div class="bg-text">Why</div>
+    <div class="slide-eyebrow">Starting Point</div>
+    <div class="slide-line"></div>
+    <h2>Why I'm Working<br>on <em>This</em></h2>
+    <div class="slide-body">
+      <p>In the past years, I have been embedded in different collaborative research ecosystems — most concretely in <strong>WP2 of Healthy Living as a Service</strong>, and through the development of <strong>ATMOS_FERA</strong> in dialogue with scientific datasets and researchers.</p>
+    </div>
+    <div class="s1-quote">
+      What exactly is the structural role of artistic research inside these contexts?
+    </div>
+    <div class="sub-note">↳ This is the starting point of the FORUM+ article I am developing.</div>
+  </div>
+
+  <!-- Slide 2 -->
+  <div class="slide" id="s2">
+    <span class="slide-num">02 / 07</span>
+    <div class="bg-text">Epistemic</div>
+    <div class="slide-eyebrow">Core Question</div>
+    <div class="slide-line"></div>
+    <h2>What Does Artistic Research Do —<br><em>Structurally?</em></h2>
+    <div class="slide-body">
+      <p>Rather than asking whether artistic research is <em>valuable</em>, I want to ask:</p>
+    </div>
+    <div class="claim-text">
+      How does artistic research reorganize the epistemic conditions of collaboration inside transdisciplinary research environments?
+    </div>
+    <div style="margin-top: 28px; display: flex; flex-direction: column; gap: 8px;">
+      <div class="list-label">By epistemic conditions, I mean</div>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0;">
+        <div class="list-item">How problems are framed</div>
+        <div class="list-item">What counts as evidence</div>
+        <div class="list-item">How knowledge is negotiated</div>
+        <div class="list-item">How authority is distributed</div>
+      </div>
+    </div>
+    <div class="sub-note">↳ This moves beyond output and impact.</div>
+  </div>
+
+  <!-- Slide 3 -->
+  <div class="slide" id="s3">
+    <span class="slide-num">03 / 07</span>
+    <div class="bg-text">Argument</div>
+    <div class="slide-eyebrow">Working Claim</div>
+    <div class="slide-line"></div>
+    <h2>Provisional<br><em>Argument</em></h2>
+    <div class="claim-text" style="margin-top: 32px;">
+      Artistic research enhances scientific collaboration not by producing artistic <em>outputs</em>, but by reorganizing how knowledge is framed, experienced, and negotiated within research ecosystems.
+    </div>
+    <div class="sub-note" style="margin-top: 32px;">↳ Grounded in two case studies: HLaS and ATMOS_FERA · Not yet a formal framework — an argument from embedded practice.</div>
+  </div>
+
+  <!-- Slide 4 -->
+  <div class="slide" id="s4">
+    <span class="slide-num">04 / 07</span>
+    <div class="bg-text">Gap</div>
+    <div class="slide-eyebrow">Structural Gap</div>
+    <div class="slide-line"></div>
+    <h2>What Is Currently<br><em>Missing</em></h2>
+    <div class="two-col" style="margin-top: 8px;">
+      <div class="list-group">
+        <div class="list-label">Existing structures account for</div>
+        <div class="list-item">Deliverables &amp; outputs</div>
+        <div class="list-item">Innovation</div>
+        <div class="list-item">Societal impact</div>
+        <div class="list-item">Collaboration efficiency</div>
+      </div>
+      <div class="list-group">
+        <div class="list-label" style="color: var(--accent);">Rarely accounted for</div>
+        <div class="list-item missing">Epistemic mediation</div>
+        <div class="list-item missing">Reframing of research questions</div>
+        <div class="list-item missing">Redistribution of disciplinary authority</div>
+        <div class="list-item missing">Experiential reorientation of data</div>
+      </div>
+    </div>
+    <div class="sub-note" style="margin-top: 24px;">↳ If artistic research operates at this level, we currently lack the vocabulary to articulate it.</div>
+  </div>
+
+  <!-- Slide 5 -->
+  <div class="slide" id="s5">
+    <span class="slide-num">05 / 07</span>
+    <div class="bg-text">EMI</div>
+    <div class="slide-eyebrow">Exploratory Tool</div>
+    <div class="slide-line"></div>
+    <h2>Epistemic Mediation Indicators<br><em>v0.1 — Working Prototype</em></h2>
+    <div class="slide-body" style="margin-bottom: 24px;">
+      <p>A qualitative diagnostic framework — not a metric, but an analytic lens. Applied to HLaS and ATMOS_FERA.</p>
+    </div>
+    <div class="emi-grid">
+      <div class="emi-card">
+        <div class="emi-num">01</div>
+        <div class="emi-label">Problem Reconfiguration</div>
+      </div>
+      <div class="emi-card">
+        <div class="emi-num">02</div>
+        <div class="emi-label">Epistemic Hierarchy Redistribution</div>
+      </div>
+      <div class="emi-card">
+        <div class="emi-num">03</div>
+        <div class="emi-label">Evaluation Friction</div>
+      </div>
+      <div class="emi-card">
+        <div class="emi-num">04</div>
+        <div class="emi-label">Experiential Reorientation</div>
+      </div>
+      <div class="emi-card">
+        <div class="emi-num">05</div>
+        <div class="emi-label">Temporal Repatterning</div>
+      </div>
+    </div>
+    <div class="sub-note" style="margin-top: 20px;">↳ The failure points are just as important as the successful ones.</div>
+  </div>
+
+  <!-- Slide 6 -->
+  <div class="slide" id="s6">
+    <span class="slide-num">06 / 07</span>
+    <div class="bg-text">Beyond</div>
+    <div class="slide-eyebrow">Strategic Layer</div>
+    <div class="slide-line"></div>
+    <h2>Beyond the<br><em>Article</em></h2>
+    <div class="strategic-body">
+      <p>If artistic research is increasingly embedded in research consortia, then conceptual clarity about its epistemic contribution becomes necessary — not only for theory, but for <strong>structural positioning within funding and governance contexts.</strong></p>
+      <p>This article is a first reflective step. It may open toward more systematic development later.</p>
+    </div>
+  </div>
+
+  <!-- Slide 7 -->
+  <div class="slide" id="s7">
+    <span class="slide-num">07 / 07</span>
+    <div class="bg-text">?</div>
+    <div class="slide-eyebrow">For Discussion</div>
+    <div class="slide-line"></div>
+    <h2>Points I Would Like<br><em>Feedback On</em></h2>
+    <div class="questions-list">
+      <div class="q-item">
+        <span class="q-num">01</span>
+        Is this the right scale of claim?
+      </div>
+      <div class="q-item">
+        <span class="q-num">02</span>
+        Does this resonate with your experience in consortia?
+      </div>
+      <div class="q-item">
+        <span class="q-num">03</span>
+        Is the focus on epistemic mediation too ambitious — or sufficiently grounded?
+      </div>
+      <div class="q-item">
+        <span class="q-num">04</span>
+        Should this remain an analytical paper, or evolve toward framework development?
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="nav-bar">
+  <div class="nav-dot active" onclick="goTo(0)"></div>
+  <div class="nav-dot" onclick="goTo(1)"></div>
+  <div class="nav-dot" onclick="goTo(2)"></div>
+  <div class="nav-dot" onclick="goTo(3)"></div>
+  <div class="nav-dot" onclick="goTo(4)"></div>
+  <div class="nav-dot" onclick="goTo(5)"></div>
+  <div class="nav-dot" onclick="goTo(6)"></div>
+</div>
+
+<button class="present-btn" onclick="startPresent()">Present ↗</button>
+<button class="exit-btn" onclick="exitPresent()">Exit</button>
+<div class="slide-counter" id="counter">1 / 7</div>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  const dots = document.querySelectorAll('.nav-dot');
+  const counter = document.getElementById('counter');
+  let current = 0;
+  let presenting = false;
+
+  function goTo(n) {
+    if (!presenting) return;
+    slides[current].classList.remove('active-slide');
+    dots[current].classList.remove('active');
+    current = (n + slides.length) % slides.length;
+    slides[current].classList.add('active-slide');
+    dots[current].classList.add('active');
+    counter.textContent = `${current + 1} / ${slides.length}`;
+  }
+
+  function startPresent() {
+    presenting = true;
+    document.body.classList.add('presenting');
+    current = 0;
+    slides.forEach(s => s.classList.remove('active-slide'));
+    slides[0].classList.add('active-slide');
+    dots.forEach((d,i) => d.classList.toggle('active', i === 0));
+    counter.textContent = `1 / ${slides.length}`;
+  }
+
+  function exitPresent() {
+    presenting = false;
+    document.body.classList.remove('presenting');
+    slides.forEach(s => s.classList.remove('active-slide'));
+  }
+
+  document.addEventListener('keydown', e => {
+    if (!presenting) return;
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') goTo(current + 1);
+    if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') goTo(current - 1);
+    if (e.key === 'Escape') exitPresent();
+  });
+</script>
+</body>
+</html>
